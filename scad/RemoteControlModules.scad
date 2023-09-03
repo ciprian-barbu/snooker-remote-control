@@ -91,6 +91,21 @@ module bat_sign(w = 5, l = 20, h = 1) {
         cube([t, h3, h]);
 }
 
+module bat_support(w = 21.4, h1 = 2, h2 = 0.4, t = 0.8, g = 0.4)
+{
+    r = 10.33 / 2;
+    difference() {
+        translate([-w/2, -t/2, 0])
+            cube([w, t, h1], center = false);
+        translate([-(r + g), 0, r + h2])
+            rotate([90, 0, 0])
+                cylinder(2*t, r, r, center = true);
+        translate([r + g, 0, r + h2])
+            rotate([90, 0, 0])
+                cylinder(2*t, r, r, center = true);
+    }
+}
+
 //////////////// Internal Modules ////////////////
 
 module RemoteControlBottom(w, l, h, d, cw, lw, lh) {
@@ -213,14 +228,25 @@ module BatteryPack() {
 
     bw = 5;
     bl = 20;
-    bh = 1;
+    bh = 0.5;
 
     // Battery sign #1
-    translate([-w/4 - bw/2 , -bl/2, -h/2 + bh/2])
-        bat_sign(bw, bl);
+    translate([-w/4 - bw/2 , -bl/2, -h/2 + t - 0.1])
+        bat_sign(bw, bl, bh);
 
     // Battery sign #2
-    translate([w/4 + bw/2 , bl/2, -h/2 + bh/2])
+    translate([w/4 + bw/2 , bl/2, -h/2 + t - 0.1])
         rotate([0, 0, 180])
-            bat_sign(bw, bl);
+            bat_sign(bw, bl, bh);
+
+    // battery support thickness
+    bst = 0.8;
+
+    // upper batter support
+    translate([0, bl/2 + bst/2 + 0.4, -h/2 + t - 0.1])
+        bat_support(w = w - 2*t, h1 = 1.8, h2 = 0.4, t = bst);
+
+    // lower batter support
+    translate([0, -(bl/2 + bst/2 + 0.4), -h/2 + t - 0.1])
+        bat_support(w = w - 2*t, h1 = 1.8, h2 = 0.4, t = bst);
 }
