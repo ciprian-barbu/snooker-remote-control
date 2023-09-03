@@ -140,6 +140,8 @@ module BatteryPack() {
     l = 50.5;
     // height
     h = 9;
+    // height of the nothches above the contacts
+    h2 = 2.5;
     // thickness
     t = 1;
     // thickness #2
@@ -155,25 +157,33 @@ module BatteryPack() {
     // contact gap
     cg = 0.8;
 
+    // Hollow the entire case
     difference() {
         cube([w, l, h], center = true);
         translate([0, 0, t]) {
             cube([w - 2*t, l - 2*t2, h], center = true);
         }
+        // upper left contact notch
+        translate([-(w - w2)/2, (l - cg)/2 - t2, (h - h2)/2])
+            cube([w2 + 2, cg, h2 + 1], center = true);
+
+        // upper right contact notch
+        translate([(w - w2)/2, (l - cg)/2 - t2, (h - h2)/2])
+            cube([w2 + 2, cg, h2 + 1], center = true);
     }
 
     union() {
-        // upper left contact notch
+        // upper left contact tab
         translate([-(w - w2)/2, l/2 - t3/2 - t2 - cg, 0]) {
             cube([w2, t3, h], center = true);
         }
 
-        // upper right contact notch
+        // upper right contact tab
         translate([(w - w2)/2, l/2 - t3/2 - t2 - cg, 0]) {
             cube([w2, t3, h], center = true);
         }
 
-        // upper middle contact notch
+        // upper middle contact tab
         translate([0, l/2 - t3/2 - t2 - cg, 0]) {
             mid_notch(h, t3);
         }
@@ -185,17 +195,17 @@ module BatteryPack() {
     }
 
     union() {
-        // lower left contact notch
+        // lower left contact tab
         translate([-(w - w2)/2, -(l/2 - t3/2 - t2 - cg), 0]) {
             cube([w2, t, h], center = true);
         }
 
-        // lower right contact notch
+        // lower right contact tab
         translate([(w - w2)/2, -(l/2 - t3/2 - t2 - cg), 0]) {
             cube([w2, t, h], center = true);
         }
 
-        // lower middle contact notch
+        // lower middle contact tab
         translate([0, -(l/2 - t3/2 - t2 - cg), 0]) {
             cube([w4, t, h], center = true);
         }
