@@ -278,15 +278,20 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _d2 = 11.4;
     translate([0, _yd, -h/2 + bd])
         buttons_grid(wb, lb, cw - bd, d, _d1, _d2);
+
+    // Offset from bottom of battery pack to bottom of the case
+    _bbo = 4;
+    // battery pack width
+    _bpw = 23.5;
+    //  battery packlength
+    _bpl = 50.5;
+    //  battery packheight
+    _bph = 11.2;
+    translate([0, -l/2 + _bbo + _bpl/2, -h/2 + cw + _bph/2])
+        BatteryPack(_bpw, _bpl, _bph);
 }
 
-module BatteryPack() {
-    // width
-    w = 23.5;
-    // length
-    l = 50.5;
-    // height
-    h = 11.2;
+module BatteryPack(w = 23.5, l = 50.5, h = 11.2) {
     // height of the nothches above the contacts
     h2 = 2.5;
     // thickness
