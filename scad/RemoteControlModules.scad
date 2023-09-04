@@ -162,19 +162,25 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     wb = 35;
     // length of buttons grid
     lb = 80;
+    // delta for avoiding holes
+    _d = 0.1;
+    // resized grid parameters
+    wbh = wb - _d;
+    lbh = lb - _d;
     // bevel depth of the buttons grid
     bd = 0.2;
 
     _yd = (l - lb)/2 - g1;
+    _ydh = (l - lbh)/2 - (g1 + _d);
     difference() {
         RemoteControlTop(w, l, h, d, cw, lw, lh);
         //cube([w, 10, h], center = true);
         //translate([0, _yd, -h/2 + cw/2])
         //    cube([wb, lb, cw + 1], center = true);
-        translate([0, _yd, -h/2]) {
+        translate([0, _ydh, -h/2]) {
             linear_extrude(cw + 1) {
                 minkowski() {
-                    square([wb - d, lb - d], center = true);
+                    square([wbh - d, lbh - d], center = true);
                     circle(d/2);
                 }
             }
