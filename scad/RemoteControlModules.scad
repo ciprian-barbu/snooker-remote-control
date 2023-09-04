@@ -108,7 +108,91 @@ module bat_support(w = 21.4, h1 = 2, h2 = 0.4, t = 0.8, g = 0.4)
     }
 }
 
-module buttons_grid() {
+// ================================
+// |        |   X      |   Y      |
+// --------------------------------
+// | B1     |   16.5   |   17     |
+// | B2     |    5.5   |   27     |
+// | B3     |   16.5   |   27     |
+// | B4     |   27.5   |   27     |
+// | B5     |    5.5   |   37     |
+// | B6     |   16.5   |   37     |
+// | B7     |   27.5   |   37     |
+// | BFoul  |   16.5   |   47     |
+// | BGame  |    8     |   57.2   |
+// | BClear |   25     |   57.2   |
+// | BEsc   |    8     |   67.8   |
+// | BEnter |   25     |   67.8   |
+// --------------------------------
+
+module wide_button(d1, d2) {
+    // inner rectangle width
+    _d2 = d2 - d1;
+    square([_d2, d1], center = true);
+    translate([-_d2/2, 0])
+        circle(d1/2);
+    translate([_d2/2, 0])
+        circle(d1/2);
+}
+
+module buttons_grid(w, l, h, d, d1, d2) {
+    // top button distance to top
+    _tb = 10;
+    // column offset #1
+    _co1 = 11;
+    // row offset #1
+    _ro1 = 10;
+    // column offset #2
+    _co2 = 7.5;
+    // row offset #2
+    _ro2 = 10.6;
+    // row offset #3
+    _ro3 = 10.2;
+
+    linear_extrude(h) {
+        difference() {
+            minkowski() {
+                square([w - d, l - d], center = true);
+                circle(d/2);
+            }
+            // B1
+            translate([0, l/2 - _tb])
+                circle(d1/2);
+            // B2
+            translate([-_co1, l/2 - _tb - _ro1])
+                circle(d1/2);
+            // B3
+            translate([0, l/2 - _tb - _ro1])
+                circle(d1/2);
+            // B4
+            translate([_co1, l/2 - _tb - _ro1])
+                circle(d1/2);
+            // B5
+            translate([-_co1, l/2 - _tb - 2*_ro1])
+                circle(d1/2);
+            // B6
+            translate([0, l/2 - _tb - 2*_ro1])
+                circle(d1/2);
+            // B7
+            translate([_co1, l/2 - _tb - 2*_ro1])
+                circle(d1/2);
+            // BFoul
+            translate([0, l/2 - _tb - 3*_ro1])
+                circle(d1/2);
+            // BGame
+            translate([-_co2, l/2 - _tb - 3*_ro1 - _ro3])
+                wide_button(d1, d2);
+            // BClear
+            translate([_co2, l/2 - _tb - 3*_ro1 - _ro3])
+                wide_button(d1, d2);
+            // BEsc
+            translate([-_co2, l/2 - _tb - 3*_ro1 - _ro3 - _ro2])
+                wide_button(d1, d2);
+            // BEnter
+            translate([_co2, l/2 - _tb - 3*_ro1 - _ro3 - _ro2])
+                wide_button(d1, d2);
+        }
+    }
 }
 
 //////////////// External Modules ////////////////
@@ -168,7 +252,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     wbh = wb - _d;
     lbh = lb - _d;
     // bevel depth of the buttons grid
-    bd = 0.2;
+    bd = 0.4;
 
     _yd = (l - lb)/2 - g1;
     _ydh = (l - lbh)/2 - (g1 + _d);
@@ -186,6 +270,14 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
             }
         }
     }
+
+    // Add buttons grid
+    // Button type 1 dimension
+    _d1 = 6.2;
+    // Button type 1 dimension
+    _d2 = 11.4;
+    translate([0, _yd, -h/2 + bd])
+        buttons_grid(wb, lb, cw - bd, d, _d1, _d2);
 }
 
 module BatteryPack() {
