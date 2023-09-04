@@ -135,7 +135,7 @@ module wide_button(d1, d2) {
         circle(d1/2);
 }
 
-module buttons_grid(w, l, h, d, d1, d2) {
+module buttons_grid(w, l, h, d, d1 = 6.2, d2 = 11.3) {
     // top button distance to top
     _tb = 10;
     // column offset #1
@@ -143,7 +143,7 @@ module buttons_grid(w, l, h, d, d1, d2) {
     // row offset #1
     _ro1 = 10;
     // column offset #2
-    _co2 = 7.5;
+    _co2 = 8.5;
     // row offset #2
     _ro2 = 10.6;
     // row offset #3
@@ -275,27 +275,27 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // Button type 1 dimension
     _d1 = 6.2;
     // Button type 1 dimension
-    _d2 = 11.4;
+    _d2 = 11.3;
     translate([0, _yd, -h/2 + bd])
         buttons_grid(wb, lb, cw - bd, d, _d1, _d2);
 
     // Offset from bottom of battery pack to bottom of the case
     _bbo = 4;
     // battery pack width
-    _bpw = 23.5;
-    //  battery packlength
-    _bpl = 50.5;
-    //  battery packheight
-    _bph = 11.2;
-    translate([0, -l/2 + _bbo + _bpl/2, -h/2 + cw + _bph/2])
+    _bpw = 23.3;
+    //  battery pack length
+    _bpl = 50.7;
+    //  battery pack height
+    _bph = 10;
+    // battery pack thickness
+    _bpt = 1;
+    translate([0, -l/2 + _bbo + _bpl/2, -h/2 +_bph/2 + cw - _bpt])
         BatteryPack(_bpw, _bpl, _bph);
 }
 
-module BatteryPack(w = 23.5, l = 50.5, h = 11.2) {
+module BatteryPack(w = 23.3, l = 50.7, h = 10, t = 1) {
     // height of the nothches above the contacts
     h2 = 2.5;
-    // thickness
-    t = 1;
     // thickness #2
     t2 = 1.2;
     // thickness #3
