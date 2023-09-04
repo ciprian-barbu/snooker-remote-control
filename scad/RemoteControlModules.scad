@@ -4,18 +4,20 @@ $fn = 100;
 
 module round_case(xx, yy, zz, d, cw) {
     difference () {
-        minkowski() {
-            cube([xx - 2*d, yy - 2*d, zz], center = true);
-            sphere(d/2);
+        translate([0, 0, d/2]) {
+            minkowski() {
+                cube([xx - d, yy - d, zz], center = true);
+                sphere(d/2);
+            }
         }
 
         // chopp off top
         translate([0, 0, zz]) cube([xx + 1, yy + 1, zz], center = true);
 
         // hollow inside
-       translate([0,0,d]) {
+       translate([0, 0, d/2 + cw]) {
            minkowski() {
-               cube([xx - 2*cw - 2*d, yy - 2*cw - 2*d, zz - 2*cw + 2*d], center = true);
+               cube([xx - 2*cw - d, yy - 2*cw - d, zz], center = true);
                sphere(d/2);
            }
        }
@@ -106,7 +108,10 @@ module bat_support(w = 21.4, h1 = 2, h2 = 0.4, t = 0.8, g = 0.4)
     }
 }
 
-//////////////// Internal Modules ////////////////
+module buttons_grid() {
+}
+
+//////////////// External Modules ////////////////
 
 module RemoteControlBottom(w, l, h, d, cw, lw, lh) {
     difference() {
@@ -115,7 +120,7 @@ module RemoteControlBottom(w, l, h, d, cw, lw, lh) {
         translate([0, 0, h/2 - lh]) {
             linear_extrude(lh + 1) {
                 minkowski() {
-                    square([w - 2*lw - 2*d, l - 2*lw - 2*d], center = true);
+                    square([w - lw - d, l - 2*lw - d], center = true);
                     circle(d/2);
                 }
             }
@@ -130,7 +135,7 @@ module RemoteControlTop(w, l, h, d, cw, lw, lh) {
         translate([0, 0, h/2 - 1]) {
             linear_extrude(lh + 1) {
                 minkowski() {
-                    square([w - 2*(cw - lw) - 2*d, l - 2*(cw - lw) - 2*d], center = true);
+                    square([w - 2*(cw - lw) - d, l - 2*(cw - lw) - d], center = true);
                     circle(d/2);
                 }
             }
@@ -140,7 +145,36 @@ module RemoteControlTop(w, l, h, d, cw, lw, lh) {
         translate([0, 0, h/2 - 2]) {
             linear_extrude(lh + 3) {
                 minkowski() {
-                    square([w - 2*cw - 2*d, l - 2*cw - 2*d], center = true);
+                    square([w - 2*cw - d, l - 2*cw - d], center = true);
+                    circle(d/2);
+                }
+            }
+        }
+    }
+}
+
+module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
+    // gap between buttons grid to front
+    g1 = 12.5;
+    // gap between buttons grid to side edge
+    g2 = 3;
+    // width of buttons grid
+    wb = 35;
+    // length of buttons grid
+    lb = 80;
+    // bevel depth of the buttons grid
+    bd = 0.2;
+
+    _yd = (l - lb)/2 - g1;
+    difference() {
+        RemoteControlTop(w, l, h, d, cw, lw, lh);
+        //cube([w, 10, h], center = true);
+        //translate([0, _yd, -h/2 + cw/2])
+        //    cube([wb, lb, cw + 1], center = true);
+        translate([0, _yd, -h/2]) {
+            linear_extrude(cw + 1) {
+                minkowski() {
+                    square([wb - d, lb - d], center = true);
                     circle(d/2);
                 }
             }
@@ -154,7 +188,7 @@ module BatteryPack() {
     // length
     l = 50.5;
     // height
-    h = 9;
+    h = 11.2;
     // height of the nothches above the contacts
     h2 = 2.5;
     // thickness
@@ -231,11 +265,11 @@ module BatteryPack() {
     bh = 0.5;
 
     // Battery sign #1
-    translate([-w/4 - bw/2 , -bl/2, -h/2 + t - 0.1])
+    translate([-w/4 - bw/2 , -bl/2, -h/2 + t])
         bat_sign(bw, bl, bh);
 
     // Battery sign #2
-    translate([w/4 + bw/2 , bl/2, -h/2 + t - 0.1])
+    translate([w/4 + bw/2 , bl/2, -h/2 + t])
         rotate([0, 0, 180])
             bat_sign(bw, bl, bh);
 

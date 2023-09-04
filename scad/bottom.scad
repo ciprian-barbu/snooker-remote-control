@@ -15,5 +15,5 @@ lw = 1;
 //ledge height
 lh = 4;
 
-//RemoteControlBottom(w, l, h, d, cw, lw, lh);
-RemoteControlBottom(20, 50, 5, 2, 2, 1, 2);
+RemoteControlBottom(w, l, h, d, cw, lw, lh);
+//RemoteControlBottom(20, 50, 5, 2, 2, 1, 2);

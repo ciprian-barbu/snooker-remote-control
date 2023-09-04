@@ -15,5 +15,5 @@ lw = 1;
 //ledge height
 lh = 4;
 
-//RemoteControlTop(w, l, h, d, cw, lw, lh);
-RemoteControlTop(20, 50, 5, 2, 2, 1, 2);
+RemoteControlTopButtons(w, l, h, d, cw, lw, lh);
+//RemoteControlTop(20, 50, 5, 2, 2, 1, 2);
