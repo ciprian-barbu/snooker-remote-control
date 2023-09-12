@@ -135,9 +135,7 @@ module wide_button(d1, d2) {
         circle(d1/2);
 }
 
-module buttons_grid(w, l, h, d, d1 = 6.2, d2 = 11.3) {
-    // top button distance to top
-    _tb = 10;
+module buttons_grid(w, l, h, d, d1 = 6.2, d2 = 11.3, tb = 10) {
     // column offset #1
     _co1 = 11;
     // row offset #1
@@ -156,40 +154,40 @@ module buttons_grid(w, l, h, d, d1 = 6.2, d2 = 11.3) {
                 circle(d/2);
             }
             // B1
-            translate([0, l/2 - _tb])
+            translate([0, l/2 - tb])
                 circle(d1/2);
             // B2
-            translate([-_co1, l/2 - _tb - _ro1])
+            translate([-_co1, l/2 - tb - _ro1])
                 circle(d1/2);
             // B3
-            translate([0, l/2 - _tb - _ro1])
+            translate([0, l/2 - tb - _ro1])
                 circle(d1/2);
             // B4
-            translate([_co1, l/2 - _tb - _ro1])
+            translate([_co1, l/2 - tb - _ro1])
                 circle(d1/2);
             // B5
-            translate([-_co1, l/2 - _tb - 2*_ro1])
+            translate([-_co1, l/2 - tb - 2*_ro1])
                 circle(d1/2);
             // B6
-            translate([0, l/2 - _tb - 2*_ro1])
+            translate([0, l/2 - tb - 2*_ro1])
                 circle(d1/2);
             // B7
-            translate([_co1, l/2 - _tb - 2*_ro1])
+            translate([_co1, l/2 - tb - 2*_ro1])
                 circle(d1/2);
             // BFoul
-            translate([0, l/2 - _tb - 3*_ro1])
+            translate([0, l/2 - tb - 3*_ro1])
                 circle(d1/2);
             // BGame
-            translate([-_co2, l/2 - _tb - 3*_ro1 - _ro3])
+            translate([-_co2, l/2 - tb - 3*_ro1 - _ro3])
                 wide_button(d1, d2);
             // BClear
-            translate([_co2, l/2 - _tb - 3*_ro1 - _ro3])
+            translate([_co2, l/2 - tb - 3*_ro1 - _ro3])
                 wide_button(d1, d2);
             // BEsc
-            translate([-_co2, l/2 - _tb - 3*_ro1 - _ro3 - _ro2])
+            translate([-_co2, l/2 - tb - 3*_ro1 - _ro3 - _ro2])
                 wide_button(d1, d2);
             // BEnter
-            translate([_co2, l/2 - _tb - 3*_ro1 - _ro3 - _ro2])
+            translate([_co2, l/2 - tb - 3*_ro1 - _ro3 - _ro2])
                 wide_button(d1, d2);
         }
     }
@@ -238,10 +236,6 @@ module RemoteControlTop(w, l, h, d, cw, lw, lh) {
 }
 
 module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
-    // gap between buttons grid to front
-    g1 = 12.5;
-    // gap between buttons grid to side edge
-    g2 = 3;
     // width of buttons grid
     wb = 35;
     // length of buttons grid
@@ -253,14 +247,34 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     lbh = lb - _d;
     // bevel depth of the buttons grid
     bd = 0.4;
+    // For buttons grid, distance between top button and top of buttons grid
+    bgtb = 10;
+    // For PCB, distance from top button to top of PCB
+    pcbtb = 18;
+    // For PCB, distance from top of PCB to top of case body
+    // this is more or less how much the IR diode protubes outside the case body
+    pcbgt = 5;
+    // gap between buttons grid to front
+    g1 = pcbtb - bgtb + pcbgt;
+    // gap between buttons grid to side edge
+    g2 = 3;
+    // PCB width 
+    pcbw = 34;
+    // PCB height
+    pcbh = 84.7;
 
+    ///////////////// Main body with cutouts //////////////
+    // PCB must sit flush to the battery pack,
+    // so we place everything relative to the front of the remote control
+    // y coordinate for the buttons grid, relative to the gap to top of case body
     _yd = (l - lb)/2 - g1;
     _ydh = (l - lbh)/2 - (g1 + _d);
     difference() {
         RemoteControlTop(w, l, h, d, cw, lw, lh);
-        //cube([w, 10, h], center = true);
-        //translate([0, _yd, -h/2 + cw/2])
-        //    cube([wb, lb, cw + 1], center = true);
+        translate([0, _yd, -h/2 + cw/2])
+            cube([wb, lb, cw + 1], center = true);
+
+        // Cut out space for the buttons grid
         translate([0, _ydh, -h/2]) {
             linear_extrude(cw + 1) {
                 minkowski() {
@@ -271,7 +285,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
         }
     }
 
-    // Add buttons grid
+    ///////////////// Buttons grid //////////////
     // Button type 1 dimension
     _d1 = 6.2;
     // Button type 1 dimension
@@ -279,21 +293,26 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     translate([0, _yd, -h/2 + bd])
         buttons_grid(wb, lb, cw - bd, d, _d1, _d2);
 
-    // Offset from bottom of battery pack to bottom of the case
+    ///////////////// Battery Pack //////////////
+    // Offset from top of battery pack to top of the case body
     _bbo = 4;
     // battery pack width
-    _bpw = 23.3;
+    _bpw = 23.8;
     //  battery pack length
     _bpl = 50.7;
     //  battery pack height
     _bph = 10;
     // battery pack thickness
     _bpt = 1;
-    translate([0, -l/2 + _bbo + _bpl/2, -h/2 +_bph/2 + cw - _bpt])
+    // y coordinate of battery pack, which sits next to the PCB
+    _yb = (l - _bpl)/2 - pcbgt - pcbh;
+
+    translate([0, _yb, -h/2 +_bph/2 + cw - _bpt])
         BatteryPack(_bpw, _bpl, _bph);
+
 }
 
-module BatteryPack(w = 23.3, l = 50.7, h = 10, t = 1) {
+module BatteryPack(w = 23.8, l = 50.7, h = 10, t = 1) {
     // height of the nothches above the contacts
     h2 = 2.5;
     // thickness #2
