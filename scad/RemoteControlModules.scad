@@ -193,6 +193,30 @@ module buttons_grid(w, l, h, d, d1 = 6.2, d2 = 11.3, tb = 10) {
     }
 }
 
+module diode_cone_block(w, l, h, dr, cr) {
+    // cone height
+    _ch = h * w/cr/dr - 0.2;
+    difference() {
+        cube([w, l, h], center = true);
+        translate([0, 0, h/2 - _ch + 0.1])
+            scale([w/cr/2, 1, 1])
+                cylinder(_ch, 0, cr);
+        translate([0, 0, -h/2 - 0.5])
+            cylinder(h + 1, dr/2, dr/2);
+    }
+}
+
+module diode_cone_block_half(w, l, h, dr, cr) {
+    translate([0, 0, l/2]) {
+        difference() {
+            rotate([-90, 0, 0])
+                diode_cone_block(w, l, h, dr, cr);
+            translate([-w/2 -0.5, - h/2 -0.5, 0])
+                cube([w + 1, h + 1, l+1]);
+        }
+    }
+}
+
 //////////////// External Modules ////////////////
 
 module RemoteControlBottom(w, l, h, d, cw, lw, lh) {
@@ -262,6 +286,10 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     pcbw = 34;
     // PCB height
     pcbh = 84.7;
+    // Diode cutout block width
+    dcbw = 13.5;
+    // Diode cutout block length
+    dcbl = 4.5;
 
     ///////////////// Main body with cutouts //////////////
     // PCB must sit flush to the battery pack,
@@ -283,6 +311,10 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
                 }
             }
         }
+
+        // Cut out space for the diode cone block
+        translate([0, (l - cw)/2, (h - dcbl + lh)/2 + 0.5])
+            cube([dcbw, cw + 1, dcbl + lh + 1], center = true);
     }
 
     ///////////////// Buttons grid //////////////
@@ -310,6 +342,16 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     translate([0, _yb, -h/2 +_bph/2 + cw - _bpt])
         BatteryPack(_bpw, _bpl, _bph);
 
+    ///////////////// Diode cone block //////////////
+    // Diode cone block height
+    dcbh = 3.5;
+    // Diode diameter
+    dcdr = 5.1;
+    // Diode cone outer radius
+    dcor = 4;
+
+    translate([0, (l - dcbh)/2, h/2 - dcbl])
+        diode_cone_block_half(dcbw, 2 * dcbl, dcbh, dcdr/2, dcor);
 }
 
 module BatteryPack(w = 23.8, l = 50.7, h = 10, t = 1) {
