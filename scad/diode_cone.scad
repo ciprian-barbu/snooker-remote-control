@@ -12,4 +12,4 @@ dcdr = 5.1;
 dcor = 4;
 
 //diode_cone_block(dcbw, dcbl, dcbh, dcdr/2, dcor);
-diode_cone_block_half(dcbw, dcbl, dcbh, dcdr/2, dcor);
+diode_cone_block_half(dcbw, dcbl, dcbh, dcdr, dcor);

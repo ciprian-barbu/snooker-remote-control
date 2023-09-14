@@ -195,7 +195,7 @@ module buttons_grid(w, l, h, d, d1 = 6.2, d2 = 11.3, tb = 10) {
 
 module diode_cone_block(w, l, h, dr, cr) {
     // cone height
-    _ch = h * w/cr/dr - 0.2;
+    _ch = h * w/dr/2;
     difference() {
         cube([w, l, h], center = true);
         translate([0, 0, h/2 - _ch + 0.1])
@@ -270,7 +270,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     wbh = wb - _d;
     lbh = lb - _d;
     // bevel depth of the buttons grid
-    bd = 0.4;
+    bd = 0;
     // For buttons grid, distance between top button and top of buttons grid
     bgtb = 10;
     // For PCB, distance from top button to top of PCB
@@ -346,12 +346,12 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // Diode cone block height
     dcbh = 3.5;
     // Diode diameter
-    dcdr = 5.1;
+    dcdr = 6;
     // Diode cone outer radius
     dcor = 4;
 
     translate([0, (l - dcbh)/2, h/2 - dcbl])
-        diode_cone_block_half(dcbw, 2 * dcbl, dcbh, dcdr/2, dcor);
+        diode_cone_block_half(dcbw, 2 * dcbl, dcbh, dcdr, dcor);
 }
 
 module BatteryPack(w = 23.8, l = 50.7, h = 10, t = 1) {
