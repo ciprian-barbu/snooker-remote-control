@@ -5,9 +5,9 @@ w = 43;
 // case length
 l = 145;
 // case height
-h = 8;
+h = 10;
 // sphere/circle diameter
-d = 2;
+d = 5;
 // case width
 cw = 2;
 // ledge width
