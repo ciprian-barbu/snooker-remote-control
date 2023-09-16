@@ -217,6 +217,38 @@ module diode_cone_block_half(w, l, h, dr, cr) {
     }
 }
 
+// Screw joint in
+// h   : height of the joint
+// do  : outer diameter (on the case)
+// di  : inner diameter (top)
+// ds  : screw hole diameter
+// shh : screw hole height
+module screw_joint_in(h, do, di, ds, shh = 8) {
+    difference() {
+        cylinder(h, do/2, di/2);
+        translate([0, 0, h - shh])
+            cylinder(shh + 1, ds/2, ds/2);
+    }
+}
+
+// Screw joint out
+// h  : height of the joint
+// do : outer diameter (on the case)
+// di : inner diameter (top)
+// ds : screw hole diameter
+// hd : screw head diameter
+module screw_joint_out(h, do, di, ds, hd) {
+    // screw hole height
+    difference() {
+        cylinder(h, do/2, di/2);
+        translate([0, 0, -0.1])
+            cylinder(h - (di - hd)  + 0.1, (hd + do - di)/2, hd/2);
+        translate([0, 0, h - (di - hd) - 0.5])
+            cylinder(di - hd + 1, ds/2, ds/2);
+    }
+}
+
+
 //////////////// External Modules ////////////////
 
 module RemoteControlBottom(w, l, h, d, cw, lw, lh) {
@@ -380,6 +412,37 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     translate([_dwx, _dwy, _dwz])
         cube([_dww, _dwl, _dwh], center = true);
 
+    ///////////////// Screw joints //////////////
+    // screw joint outer diameter
+    _sjdo = 5.5;
+    // screw joint inner diameter
+    _sjdi = 5;
+    // screw hole diameter
+    _sjds = 2.2;
+    // screw head diameter
+    _sjhd = 4.36;
+    // gap from scre joint to case
+    _sjgc = 0.6;
+    // x coordinate of the screw joints
+    _sjx = (w - _sjdo)/2 - cw - _sjgc;
+    // y coordinate of the screw joints
+    _sjy = (l - _sjdo)/2 - cw - _sjgc;
+
+    // left top screw joint
+    translate([- _sjx, _sjy, -h/2])
+        screw_joint_in(h, _sjdo, _sjdi, _sjds);
+
+    // right top screw joint
+    translate([_sjx, _sjy, -h/2])
+        screw_joint_in(h, _sjdo, _sjdi, _sjds);
+
+    // left bottop screw joint
+    translate([- _sjx, - _sjy, -h/2])
+        screw_joint_in(h, _sjdo, _sjdi, _sjds);
+
+    // right bottop screw joint
+    translate([_sjx, - _sjy, -h/2])
+        screw_joint_in(h, _sjdo, _sjdi, _sjds);
 }
 
 module BatteryPack(w = 23.8, l = 50.7, h = 10, t = 1) {
