@@ -284,8 +284,8 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     g2 = 3;
     // PCB width 
     pcbw = 34;
-    // PCB height
-    pcbh = 84.7;
+    // PCB length
+    pcbl = 84.7;
     // Diode cutout block width
     dcbw = 13.5;
     // Diode cutout block length
@@ -299,8 +299,9 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _ydh = (l - lbh)/2 - (g1 + _d);
     difference() {
         RemoteControlTop(w, l, h, d, cw, lw, lh);
-        translate([0, _yd, -h/2 + cw/2])
-            cube([wb, lb, cw + 1], center = true);
+
+        //translate([0, _yd, -h/2 + cw/2])
+        //    cube([wb, lb, cw + 1], center = true);
 
         // Cut out space for the buttons grid
         translate([0, _ydh, -h/2]) {
@@ -333,25 +334,52 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     //  battery pack length
     _bpl = 50.7;
     //  battery pack height
-    _bph = 10;
+    _bph = 10.3;
     // battery pack thickness
     _bpt = 1;
     // y coordinate of battery pack, which sits next to the PCB
-    _yb = (l - _bpl)/2 - pcbgt - pcbh;
+    _yb = (l - _bpl)/2 - pcbgt - pcbl;
+    // z offset for the battery pack to be on the same level with the PCB
+    _zb = 0;
 
-    translate([0, _yb, -h/2 +_bph/2 + cw - _bpt])
+    translate([0, _yb, -h/2 +_bph/2 + cw - _bpt + _zb])
         BatteryPack(_bpw, _bpl, _bph);
 
     ///////////////// Diode cone block //////////////
     // Diode cone block height
     dcbh = 3.5;
     // Diode diameter
-    dcdr = 6;
+    dcdr = 4.9;
     // Diode cone outer radius
     dcor = 4;
 
     translate([0, (l - dcbh)/2, h/2 - dcbl])
         diode_cone_block_half(dcbw, 2 * dcbl, dcbh, dcdr, dcor);
+
+    ///////////////// PCB delimiters //////////////
+    // delimiter wall width
+    _dww = 0.8;
+    // delimiter wall length
+    _dwl = pcbl * 0.75;
+    // delimiter wall height
+    _dwh = h + lh/2 - bd;
+    // small delta to allow some room between PCB and the delimiter walls
+    _dwd = 0.3;
+    // x coordinate of the delimiter walls
+    _dwx = (pcbw + _dww + _dwd) / 2;
+    // y coordinate of the delimiter walls
+    _dwy = (l - pcbgt - pcbl)/2;
+    // z coordinate of the delimiter walls
+    _dwz = (bd + lh)/2;
+
+    // Left delimiter wall
+    translate([- _dwx, _dwy, _dwz])
+        cube([_dww, _dwl, _dwh], center = true);
+
+    // Right delimiter wall
+    translate([_dwx, _dwy, _dwz])
+        cube([_dww, _dwl, _dwh], center = true);
+
 }
 
 module BatteryPack(w = 23.8, l = 50.7, h = 10, t = 1) {
