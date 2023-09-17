@@ -396,7 +396,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // delimiter wall height
     _dwh = h + lh/2 - bd;
     // small delta to allow some room between PCB and the delimiter walls
-    _dwd = 0.3;
+    _dwd = 0.4;
     // x coordinate of the delimiter walls
     _dwx = (pcbw + _dww + _dwd) / 2;
     // y coordinate of the delimiter walls
@@ -421,7 +421,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _sjds = 2.2;
     // screw head diameter
     _sjhd = 4.36;
-    // gap from scre joint to case
+    // gap from screw joint to case
     _sjgc = 0.6;
     // x coordinate of the screw joints
     _sjx = (w - _sjdo)/2 - cw - _sjgc;
@@ -429,12 +429,30 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _sjy = (l - _sjdo)/2 - cw - _sjgc;
 
     // left top screw joint
-    translate([- _sjx, _sjy, -h/2])
-        screw_joint_in(h, _sjdo, _sjdi, _sjds);
+    //translate([- _sjx, _sjy, -h/2])
+    //    screw_joint_in(h, _sjdo, _sjdi, _sjds);
+
+    // notch joint width
+    _njl = 2;
+    // notch joint height;
+    _njh = 2;
+
+    _njx = _sjx - d/2;
+    _njy = (l - cw - _njl) / 2;
+    _njz = (h + _njh) / 2;
+
+    // left top notch instead of screw joint
+    translate([- _njx, _njy , _njz])
+        cube([_sjdi, _njl, _njh], center = true);
 
     // right top screw joint
-    translate([_sjx, _sjy, -h/2])
-        screw_joint_in(h, _sjdo, _sjdi, _sjds);
+    //translate([_sjx, _sjy, -h/2])
+    //    screw_joint_in(h, _sjdo, _sjdi, _sjds);
+
+    // right top notch instead of screw joint
+    translate([_njx, _njy , _njz])
+        cube([_sjdi, _njl, _njh], center = true);
+
 
     // left bottop screw joint
     translate([- _sjx, - _sjy, -h/2])
