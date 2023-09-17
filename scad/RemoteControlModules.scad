@@ -359,8 +359,6 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
         buttons_grid(wb, lb, cw - bd, d, _d1, _d2);
 
     ///////////////// Battery Pack //////////////
-    // Offset from top of battery pack to top of the case body
-    _bbo = 4;
     // battery pack width
     _bpw = 23.8;
     //  battery pack length
@@ -372,7 +370,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // y coordinate of battery pack, which sits next to the PCB
     _yb = (l - _bpl)/2 - pcbgt - pcbl;
     // z offset for the battery pack to be on the same level with the PCB
-    _zb = 0;
+    _zb = 1.5;
 
     translate([0, _yb, -h/2 +_bph/2 + cw - _bpt + _zb])
         BatteryPack(_bpw, _bpl, _bph);
