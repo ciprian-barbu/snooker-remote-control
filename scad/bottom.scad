@@ -5,9 +5,9 @@ w = 43;
 // case length
 l = 145;
 // case height
-h = 8;
+h = 8.5;
 // sphere/circle diameter
-d = 2;
+d = 5;
 // case width
 cw = 2;
 // ledge width
@@ -15,5 +15,5 @@ lw = 1;
 //ledge height
 lh = 3;
 
-RemoteControlBottom(w, l, h, d, cw, lw, lh);
-//RemoteControlBottom(20, 50, 5, 2, 2, 1, 2);
+//RemoteControlBottom(w, l, h, d, cw, lw, lh);
+RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh);

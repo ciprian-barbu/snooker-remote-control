@@ -237,7 +237,7 @@ module screw_joint_in(h, do, di, ds, shh = 8) {
 // di : inner diameter (top)
 // ds : screw hole diameter
 // hd : screw head diameter
-module screw_joint_out(h, do, di, ds, hd) {
+module screw_joint_out(h, do, di, ds, hd = 4.36) {
     // screw hole height
     difference() {
         cylinder(h, do/2, di/2);
@@ -314,8 +314,6 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _sjdi = 5;
     // screw hole diameter
     _sjds = 2.2;
-    // screw head diameter
-    _sjhd = 4.36;
     // gap from screw joint to case
     _sjgc = 0.6;
     // x coordinate of the screw joints
@@ -324,13 +322,15 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _sjy = (l - _sjdo)/2 - cw - _sjgc;
 
     // notch joint width
-    _njl = 2;
-    // notch joint height;
+    _njw = _sjdi;
+    // notch joint length;
+    _njl = cw;
+    // notch joint height
     _njh = lh/2;
 
     _njx = _sjx - d/2;
-    _njy = (l - cw - _njl) / 2;
-    _njz = (h + _njh) / 2;
+    _njy = (l - cw) / 2;
+    _njz = (h + lh) / 2;
 
 
     ///////////////// Main body with cutouts //////////////
@@ -361,11 +361,11 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
 
         // left top notch instead of screw joint
         translate([- _njx, _njy , _njz])
-            cube([_sjdi, _njl + 1, _njh], center = true);
+            cube([_njw, _njl + 1, _njh], center = true);
 
         // right top notch instead of screw joint
         translate([_njx, _njy , _njz])
-            cube([_sjdi, _njl + 1, _njh], center = true);
+            cube([_njw, _njl + 1, _njh], center = true);
     }
 
     ///////////////// Diode cone block //////////////
@@ -587,6 +587,31 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     _bdcy = - (l - _bdcl) / 2;
     // battery door cutout y coordinate
     _bdcz = - (h - cw) / 2;
+    // screw joint outer diameter
+    _sjdo = 5.5;
+    // screw joint inner diameter
+    _sjdi = 5;
+    // screw hole diameter
+    _sjds = 2.2;
+    // screw head diameter
+    _sjhd = 4.36;
+    // gap from screw joint to case
+    _sjgc = 0.6;
+    // x coordinate of the screw joints
+    _sjx = (w - _sjdo)/2 - cw - _sjgc;
+    // y coordinate of the screw joints
+    _sjy = (l - _sjdo)/2 - cw - _sjgc;
+
+    // notch joint width
+    _njw = _sjdi;
+    // notch joint length (slightly smaller than the top joint cutouts
+    _njl = 2 - 0.2;
+    // notch joint height
+    _njh = lh/2 - 0.2;
+
+    _njx = _sjx - d/2;
+    _njy = l/2 - cw + 0.1;
+    _njz = (h - lh) / 2;
 
     ///////////////// Main body with cutouts //////////////
 
@@ -597,10 +622,24 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
         translate([0, (l - cw)/2, (h - dcbl + lh)/2 + 0.5])
             cube([dcbw, cw + 1, dcbl + lh + 1], center = true);
 
-        // Cout out space for the battery door
+        // Cut out space for the battery door
         translate([_bdcx, _bdcy, _bdcz])
             cube([_bdcw, _bdcl, cw + 0.2], center = true);
+
+        // Cut out space for the screw joints
+        translate([- _sjx, - _sjy, -h/2])
+            cylinder(h, _sjdo/2 -0.05, _sjdi/2 -0.05);
+        translate([_sjx, - _sjy, -h/2])
+            cylinder(h, _sjdo/2 -0.05, _sjdi/2 -0.05);
     }
+
+    ///////////////// Notches //////////////
+    translate([- _njx, _njy , _njz])
+        cube([_njw, _njl, _njh], center = true);
+
+    // right top notch instead of screw joint
+    translate([_njx, _njy , _njz])
+        cube([_njw, _njl, _njh], center = true);
 
     ///////////////// Diode cone block //////////////
     // Diode cone block height
@@ -612,4 +651,13 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
 
     translate([0, (l - dcbh)/2, h/2 - dcbl])
         diode_cone_block_half(dcbw, 2 * dcbl, dcbh, dcdr, dcor);
+
+    ///////////////// Screw joints //////////////
+    // left bottop screw joint
+    translate([- _sjx, - _sjy, -h/2])
+        screw_joint_out(h, _sjdo, _sjdi, _sjds, _sjhd);
+
+    // right bottop screw joint
+    translate([_sjx, - _sjy, -h/2])
+        screw_joint_out(h, _sjdo, _sjdi, _sjds, _sjhd);
 }
