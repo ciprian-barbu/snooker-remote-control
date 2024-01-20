@@ -13,7 +13,6 @@ cw = 2;
 // ledge width
 lw = 1;
 //ledge height
-lh = 3;
+lh = 4;
 
-//RemoteControlBottom(w, l, h, d, cw, lw, lh);
 RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh);
