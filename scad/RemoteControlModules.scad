@@ -248,6 +248,14 @@ module screw_joint_out(h, do, di, ds, hd = 4.36) {
     }
 }
 
+module tprism(w1, w2, l, h) {
+    rotate([90, 0, 0]) {
+        linear_extrude(height = l, center = true) {
+            polygon(points = [ [-w2/2, -h/2], [w2/2, -h/2], [w1/2, h/2], [-w1/2, h/2] ]);
+        }
+    }
+}
+
 
 //////////////// External Modules ////////////////
 
