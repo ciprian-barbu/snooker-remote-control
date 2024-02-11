@@ -619,7 +619,7 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // battery door block width
     _bdbw = _bdcw + 2 * (_bdlw + _bdhww);
     // battery door block length
-    _bdbl = _bdcl - cw - 0.1;
+    _bdbl = _bdcl - cw + _bdhww;
     // battery door block height (apply small delta)
     _bdbh = _bdlh + _bdhwh + 0.1;
     // battery door block x coordinate
@@ -630,11 +630,28 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     _bdbz = - (h/2 - _bdbh/2 - cw) - 0.1;
     // battery door ledge cutout width
     _bdlcw = _bdcw + 2 * (_bdlw);
+    // battery door ledge cutout length
     _bdlcl = _bdcl + 0.1;
+    // battery door ledge cutout height
     _bdlch = _bdlh;
+    // battery door ledge x coordinate
     _bdlcx = 0;
+    // battery door ledge y coordinate
     _bdlcy = - (l - _bdcl)/2;
+    // battery door ledge z coordinate
     _bdlcz = - (h/2 - cw - _bdlch/2);
+    // battery door ledge cutout width (outer)
+    _bdlcow = _bdcw;
+    // battery door ledge cutout length (outer)
+    _bdlcol = _bdcl - cw;
+    // battery door ledge cutout height (outer)
+    _bdlcoh = _bdbh + 0.1;
+    // battery door ledge cutout x coordinate (outer)
+    _bdlcox = _bdbx;
+    // battery door ledge cutout y coordinate (outer)
+    _bdlcoy = _bdby;
+    // battery door ledge cutout z coordinate (outer)
+    _bdlcoz = _bdbz + 0.05;
     // screw joint outer diameter
     _sjdo = 5.5;
     // screw joint inner diameter
@@ -679,9 +696,9 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
         translate([_bdcx, _bdcy, _bdcz])
             cube([_bdcw, _bdcl, _bdch], center = true);
 
-        // Cut out top space for the battery door
-        translate([_bdbx, _bdby + 0.05, _bdbz])
-            cube([_bdcw, _bdbl + 0.1, _bdbh + 0.1], center = true);
+        // Cut out outer space for the battery door
+        translate([_bdlcox, _bdlcoy, _bdlcoz])
+            cube([_bdlcow, _bdlcol, _bdlcoh], center = true);
 
         // Cut out space for the battery door ledge
         translate([_bdlcx, _bdlcy, _bdlcz])
