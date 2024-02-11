@@ -583,7 +583,7 @@ module RemoteControlBottom(w, l, h, d, cw, lw, lh) {
         translate([0, 0, h/2 - lh]) {
             linear_extrude(lh + 1) {
                 minkowski() {
-                    square([w - 2*(cw -lw) - d, l - 2*(cw - lw) - d], center = true);
+                    square([w - 2*(lw) - d, l - 2*(lw) - d], center = true);
                     circle(d/2);
                 }
             }
