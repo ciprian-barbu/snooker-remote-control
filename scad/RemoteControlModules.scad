@@ -308,6 +308,13 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // Diode cutout block length
     dcbl = 4.5;
 
+    // Diode cone block height
+    dcbh = 3.5;
+    // Diode diameter
+    dcdr = 4.9;
+    // Diode cone outer radius
+    dcor = 4;
+
     // screw joint outer diameter
     _sjdo = 5.5;
     // screw joint inner diameter
@@ -321,15 +328,16 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // y coordinate of the screw joints
     _sjy = (l - _sjdo)/2 - cw - _sjgc;
 
-    // notch joint width
-    _njw = _sjdi;
-    // notch joint length;
-    _njl = cw;
+    // notch joint length
+    _njl = cw/2 + 0.2;
     // notch joint height
-    _njh = lh/2;
+    _njh = lh/2 * 0.9;
 
-    _njx = _sjx - d/2;
-    _njy = (l - cw) / 2;
+    // notch joint x coordinate (half of the segment delimited by the diode cutout block
+    _njx = (w - dcbw)/2 - lw;
+    // notch joint y coordinate
+    _njy = l/2 - lw + 0.1;
+    // notch joint z coordinate
     _njz = (h + lh) / 2;
 
 
@@ -341,9 +349,6 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _ydh = (l - lbh)/2 - (g1 + _d);
     difference() {
         RemoteControlTop(w, l, h, d, cw, lw, lh);
-
-        //translate([0, _yd, -h/2 + cw/2])
-        //    cube([wb, lb, cw + 1], center = true);
 
         // Cut out space for the buttons grid
         translate([0, _ydh, -h/2]) {
@@ -361,28 +366,24 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
 
         // left top notch instead of screw joint
         translate([- _njx, _njy , _njz])
-            cube([_njw, _njl + 1, _njh], center = true);
+            rotate([90, 0, 0])
+                cylinder(_njl, _njh, _njh/2);
 
         // right top notch instead of screw joint
         translate([_njx, _njy , _njz])
-            cube([_njw, _njl + 1, _njh], center = true);
+            rotate([90, 0, 0])
+                cylinder(_njl, _njh, _njh/2);
+
     }
 
     ///////////////// Diode cone block //////////////
-    // Diode cone block height
-    dcbh = 3.5;
-    // Diode diameter
-    dcdr = 4.9;
-    // Diode cone outer radius
-    dcor = 4;
-
     translate([0, (l - dcbh)/2, h/2 - dcbl])
         diode_cone_block_half(dcbw, 2 * dcbl, dcbh, dcdr, dcor);
 
     ///////////////// Buttons grid //////////////
     // Button type 1 dimension
     _d1 = 6.2;
-    // Button type 1 dimension
+    // Button type 2 dimension
     _d2 = 11.3;
     translate([0, _yd, -h/2 + bd])
         buttons_grid(wb, lb, cw - bd, d, _d1, _d2);
@@ -587,24 +588,20 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     dcbw = 13.5;
     // Diode cutout block length
     dcbl = 4.5;
+    // battery door holder wall width
+    _bdhww = 2;
+    // battery door holder wall height
+    _bdhwh = 1;
+    // battery door ledge height
+    _bdlh = 1;
+    // battery door ledge width
+    _bdlw = 1.5;
     // battery door cutout width
     _bdcw = 23;
     // battery door cutout length
-    _bdcl = 51;
-    // battery door riser width
-    _bdrw = 2;
-    // battery door riser height
-    _bdrh = 1;
-    // battery door holder ledge height
-    _bdhlh = 0.8;
-    // battery door holder ledge width
-    _bdhlw = 2;
-    // battery door block height (apply small delta)
-    _bdbh = _bdhlh + _bdrh + 0.1;
+    _bdcl = 54;
     // battery door cutout height
-    _bdch = cw + _bdbh + 0.2;
-    // battery door riser length
-    _bdrl = _bdcl + _bdhlw + _bdrw;
+    _bdch = cw + _bdhwh;
     // battery door cutout x coordinate
     _bdcx = 0;
     // battery door cutout y coordinate
@@ -612,21 +609,23 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // battery door cutout z coordinate
     _bdcz = - (h - _bdch) / 2 - 0.1;
     // battery door block width
-    _bdbw = _bdcw + 2 * (_bdhlw + _bdrw);
+    _bdbw = _bdcw + 2 * (_bdlw + _bdhww);
     // battery door block length
-    _bdbl = _bdcl - 0.1;
+    _bdbl = _bdcl - cw - 0.1;
+    // battery door block height (apply small delta)
+    _bdbh = _bdlh + _bdhwh + 0.1;
     // battery door block x coordinate
     _bdbx = 0;
     // battery door block y coordinate
-    _bdby = _bdcy;
+    _bdby = _bdcy + cw/2;
     // battery door block z coordinate (apply small delta)
     _bdbz = - (h/2 - _bdbh/2 - cw) - 0.1;
     // battery door ledge cutout width
-    _bdlcw = _bdcw + 2 * (_bdhlw);
-    _bdlcl = _bdbl + cw;
-    _bdlch = _bdhlh;
+    _bdlcw = _bdcw + 2 * (_bdlw);
+    _bdlcl = _bdcl + 0.1;
+    _bdlch = _bdlh;
     _bdlcx = 0;
-    _bdlcy = _bdby + cw/2 - 0.2;
+    _bdlcy = - (l - _bdcl)/2;
     _bdlcz = - (h/2 - cw - _bdlch/2);
     // screw joint outer diameter
     _sjdo = 5.5;
@@ -643,15 +642,16 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // y coordinate of the screw joints
     _sjy = (l - _sjdo)/2 - cw - _sjgc;
 
-    // notch joint width
-    _njw = _sjdi - 0.4;
-    // notch joint length (slightly smaller than the top joint cutouts
-    _njl = 1.6;
+    // notch joint length
+    _njl = cw/2;
     // notch joint height
-    _njh = lh/2 - 0.8;
+    _njh = lh/2 * 0.75;
 
+    // notch joint x coordinate (half of the segment delimited by the diode cutout block
     _njx = _sjx - d/2;
-    _njy = l/2 - cw + 0.1;
+    // notch joint y coordinate
+    _njy = l/2 - lw + 0.1;
+    // notch joint z coordinate
     _njz = (h - lh) / 2;
 
     ///////////////// Main body with cutouts //////////////
@@ -659,7 +659,7 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     difference() {
         union() {
             RemoteControlBottom(w, l, h, d, cw, lw, lh);
-            translate([0, _bdby, _bdbz])
+            translate([_bdbx, _bdby, _bdbz])
                 cube([_bdbw, _bdbl, _bdbh], center = true);
         }
 
@@ -667,9 +667,13 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
         translate([0, (l - cw)/2, (h - dcbl + lh)/2 + 0.5])
             cube([dcbw, cw + 1, dcbl + lh + 1], center = true);
 
-        // Cut out space for the battery door
+        // Cut out bulk space for the battery door
         translate([_bdcx, _bdcy, _bdcz])
             cube([_bdcw, _bdcl, _bdch], center = true);
+
+        // Cut out top space for the battery door
+        translate([_bdbx, _bdby + 0.05, _bdbz])
+            cube([_bdcw, _bdbl + 0.1, _bdbh + 0.1], center = true);
 
         // Cut out space for the battery door ledge
         translate([_bdlcx, _bdlcy, _bdlcz])
@@ -683,15 +687,11 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     }
 
     ///////////////// Notches //////////////
-    //translate([- _njx, _njy , _njz])
-    //    cube([_njw, _njl, _njh], center = true);
     translate([- _njx, _njy , _njz])
         rotate([90, 0, 0])
             cylinder(_njl, _njh, _njh/2);
 
     // right top notch instead of screw joint
-    //translate([_njx, _njy , _njz])
-    //    cube([_njw, _njl, _njh], center = true);
     translate([_njx, _njy , _njz])
         rotate([90, 0, 0])
             cylinder(_njl, _njh, _njh/2);
