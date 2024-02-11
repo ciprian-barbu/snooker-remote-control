@@ -599,9 +599,9 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // battery door holder wall width
     _bdhww = 2;
     // battery door holder wall height
-    _bdhwh = 1;
+    _bdhwh = 0.75;
     // battery door ledge height
-    _bdlh = 1;
+    _bdlh = 1.5;
     // battery door ledge width
     _bdlw = 1.5;
     // battery door cutout width
@@ -685,7 +685,7 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
 
         // Cut out space for the battery door ledge
         translate([_bdlcx, _bdlcy, _bdlcz])
-            cube([_bdlcw, _bdlcl, _bdlch], center = true);
+            tprism(_bdlcw, _bdcw, _bdlcl, _bdlh);
 
         // Cut out space for the screw joints
         translate([- _sjx, - _sjy, -h/2])
