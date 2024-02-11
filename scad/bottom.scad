@@ -11,7 +11,7 @@ d = 5;
 // case width
 cw = 2;
 // ledge width
-lw = 1;
+lw = cw/2;
 //ledge height
 lh = 4;
 
