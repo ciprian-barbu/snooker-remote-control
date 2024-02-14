@@ -679,11 +679,57 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // notch joint z coordinate
     _njz = (h - lh) / 2;
 
+    // For buttons grid, distance between top button and top of buttons grid
+    bgtb = 10;
+    // For PCB, distance from top button to top of PCB
+    pcbtb = 18;
+    // For PCB, distance from top of PCB to top of case body
+    // this is more or less how much the IR diode protubes outside the case body
+    pcbgt = 5;
+    // gap between buttons grid to front
+    g1 = pcbtb - bgtb + pcbgt;
+    // gap between buttons grid to side edge
+    g2 = 3;
+    // PCB width 
+    pcbw = 34;
+    // PCB length
+    pcbl = 84.7;
+    // PCB side support width
+    _pcbssw = 3;
+    // PCB side support length
+    _pcbssl = 30;
+    // PCB side support height
+    _pcbssh = 7.8;
+    // PCB side support x coordinate
+    _pcbssx = 23/2;
+    // PCB side support y coordinate
+    _pcbssy = (l - pcbl)/2 - pcbgt;
+    // PCB side support z coordinate
+    _pcbssz = -(h - _pcbssh)/2 + cw - 0.1;
+    // PCB top/bottom support y gap
+    _pcbsgy = 24;
+    // PCB top support width
+    _pcbtsw = 16;
+    // PCB top support length
+    _pcbtsl = 3;
+    // PCB top support height
+    _pcbtsh = _pcbssh;
+    // PCB top support x coordinate
+    _pcbtsx = 0;
+    // PCB top support y coordinate
+    _pcbtsy = l/2 - pcbgt - _pcbsgy;
+    // PCB top support z coordinate
+    _pcbtsz = _pcbssz;
+    // PCB bottom support y coordinate
+    _pcbbsy = l/2 - pcbgt - pcbl + _pcbsgy;
+
+
     ///////////////// Main body with cutouts //////////////
 
     difference() {
         union() {
             RemoteControlBottom(w, l, h, d, cw, lw, lh);
+            // Battery door block (for ledge support)
             translate([_bdbx, _bdby, _bdbz])
                 cube([_bdbw, _bdbl, _bdbh], center = true);
         }
@@ -740,4 +786,40 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // right bottop screw joint
     translate([_sjx, - _sjy, -h/2])
         screw_joint_out(h, _sjdo, _sjdi, _sjds, _sjhd);
+
+    ///////////////// PCB supports //////////////
+
+    // Left PCB side support
+    translate([- _pcbssx, _pcbssy, _pcbssz])
+        cube([_pcbssw, _pcbssl, _pcbssh], center = true);
+
+    // Right PCB side support
+    translate([_pcbssx, _pcbssy, _pcbssz])
+        cube([_pcbssw, _pcbssl, _pcbssh], center = true);
+
+    // Top PCB support
+    translate([_pcbtsx, _pcbtsy, _pcbtsz])
+        cube([_pcbtsw, _pcbtsl, _pcbtsh], center = true);
+
+    // Bottom PCB support
+    translate([_pcbtsx, _pcbbsy, _pcbtsz])
+        cube([_pcbtsw, _pcbtsl, _pcbtsh], center = true);
+}
+
+module RemoteControlBatteryDoor(cow1, cow2, col, coh1, coh2) {
+    // small delta
+    _d1 = 0.5;
+    _d2 = 0.35;
+    _cow = 8;
+    _col = 2;
+    _coh = 1.2;
+    difference() {
+        union() {
+            tprism(cow1 - _d1, cow2 - _d1, col, coh1 - _d2);
+            translate([0, 0, coh1 - _d2 - 0.05])
+                cube([cow1 - _d2, col, coh2 - _d2], center = true);
+        }
+        translate([0, 0, (coh1 - _coh)/2 + coh2 - _d2 - 0.05])
+            cube([_cow, _col, _coh + 0.05], center = true);
+    }
 }
