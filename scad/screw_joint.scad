@@ -1,11 +1,11 @@
 include <RemoteControlModules.scad>
 
 h  = 10;
-do = 5.5;
-di = 5;
-ds = 2.4;
+do = 6;
+di = 5.8;
+ds = 2;
 // screw head diameter
-hd = 4.36;
+hd = 3.6;
 
 cl = 28;
 ch = 2;

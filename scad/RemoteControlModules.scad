@@ -239,12 +239,14 @@ module screw_joint_in(h, do, di, ds, shh = 8) {
 // hd : screw head diameter
 module screw_joint_out(h, do, di, ds, hd = 4.36) {
     // screw hole height
+    // thickness
+    _t = 3;
     difference() {
         cylinder(h, do/2, di/2);
         translate([0, 0, -0.1])
-            cylinder(h - (di - hd)  + 0.1, (hd + do - di)/2, hd/2);
-        translate([0, 0, h - (di - hd) - 0.5])
-            cylinder(di - hd + 1, ds/2, ds/2);
+            cylinder(h - _t + 0.1, (hd + do - di)/2, hd/2);
+        translate([0, 0, h - _t - 0.05])
+            cylinder(_t + 0.1, ds/2, ds/2);
     }
 }
 
@@ -324,11 +326,11 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     dcor = 4;
 
     // screw joint outer diameter
-    _sjdo = 5.5;
+    _sjdo = 6;
     // screw joint inner diameter
-    _sjdi = 5;
+    _sjdi = 5.8;
     // screw hole diameter
-    _sjds = 2.2;
+    _sjds = 2;
     // gap from screw joint to case
     _sjgc = 0.6;
     // x coordinate of the screw joints
@@ -653,13 +655,13 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // battery door ledge cutout z coordinate (outer)
     _bdlcoz = _bdbz + 0.05;
     // screw joint outer diameter
-    _sjdo = 5.5;
+    _sjdo = 6;
     // screw joint inner diameter
-    _sjdi = 5;
+    _sjdi = 5.8;
     // screw hole diameter
-    _sjds = 2.2;
+    _sjds = 1.8;
     // screw head diameter
-    _sjhd = 4.36;
+    _sjhd = 3.6;
     // gap from screw joint to case
     _sjgc = 0.6;
     // x coordinate of the screw joints
