@@ -346,9 +346,20 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // notch joint x coordinate (half of the segment delimited by the diode cutout block
     _njx = (w - dcbw)/2 - lw;
     // notch joint y coordinate
-    _njy = l/2 - lw + 0.1;
+    _njy = l/2 - cw + lw + 0.05;
     // notch joint z coordinate
     _njz = (h + lh) / 2;
+
+    // side notch joint length
+    _snjl = _njl;
+    // side notch joint height
+    _snjh = _njh;
+    // side notch joint x coordinate (half of the case length)
+    _snjx = w/2 - cw + lw + 0.05;
+    // side notch joint y coordinate (half of the case length)
+    _snjy = 0;
+    // side notch joint z coordinate
+    _snjz = _njz;
 
 
     ///////////////// Main body with cutouts //////////////
@@ -383,6 +394,16 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
         translate([_njx, _njy , _njz])
             rotate([90, 0, 0])
                 cylinder(_njl, _njh, _njh/2);
+
+        // left side notch
+        translate([- _snjx, _snjy , _snjz])
+            rotate([90, 0, 90])
+                cylinder(_snjl, _snjh, _snjh/2);
+
+        // right side notch
+        translate([_snjx, _snjy , _snjz])
+            rotate([90, 0, -90])
+                cylinder(_snjl, _snjh, _snjh/2);
 
     }
 
@@ -449,7 +470,7 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     // delimiter wall width
     _dww = 3.2;
     // delimiter wall length
-    _dwl = pcbl * 0.75;
+    _dwl = pcbl * 0.61;
     // delimiter wall height
     _dwh = h + lh/2 - bd;
     // small delta to allow some room between PCB and the delimiter walls
@@ -681,6 +702,17 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // notch joint z coordinate
     _njz = (h - lh) / 2;
 
+    // side notch joint length
+    _snjl = _njl;
+    // side notch joint height
+    _snjh = _njh;
+    // side notch joint x coordinate (half of the case length)
+    _snjx = w/2 - lw + 0.05;
+    // side notch joint y coordinate (half of the case length)
+    _snjy = 0;
+    // side notch joint z coordinate
+    _snjz = _njz;
+
     // For buttons grid, distance between top button and top of buttons grid
     bgtb = 10;
     // For PCB, distance from top button to top of PCB
@@ -767,6 +799,16 @@ module RemoteControlBottomBatDoor(w, l, h, d, cw, lw, lh) {
     // right top notch instead of screw joint
     translate([_njx, _njy , _njz])
         rotate([90, 0, 0])
+            cylinder(_njl, _njh, _njh/2);
+
+    // left side notch
+    translate([- _snjx, _snjy , _snjz])
+        rotate([90, 0, 90])
+            cylinder(_njl, _njh, _njh/2);
+
+    // right side notch
+    translate([_snjx, _snjy , _snjz])
+        rotate([90, 0, -90])
             cylinder(_njl, _njh, _njh/2);
 
     ///////////////// Diode cone block //////////////
