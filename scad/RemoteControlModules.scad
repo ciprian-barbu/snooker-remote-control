@@ -856,14 +856,14 @@ module RemoteControlBatteryDoor(cow1, cow2, col, coh1, coh2) {
     _d2 = 0.35;
     _cow = 8;
     _col = 2;
-    _coh = 1.2;
+    _coh = 1.5;
     difference() {
         union() {
             tprism(cow1 - _d1, cow2 - _d1, col, coh1 - _d2);
-            translate([0, 0, coh1 - _d2 - 0.05])
+            translate([0, 0, (coh1 + coh2)/2 - _d2 - 0.05])
                 cube([cow1 - _d2, col, coh2 - _d2], center = true);
         }
-        translate([0, 0, (coh1 - _coh)/2 + coh2 - _d2 - 0.05])
-            cube([_cow, _col, _coh + 0.05], center = true);
+        translate([0, 0, (coh1 - _coh)/2 - _d2 + coh2 + 0.05])
+            cube([_cow, _col, _coh + 0.1], center = true);
     }
 }
