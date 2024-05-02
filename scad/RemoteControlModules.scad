@@ -868,7 +868,7 @@ module RemoteControlBatteryDoor(cow1, cow2, col, coh1, coh2) {
     }
 }
 
-module RemoteControlPCBSpacer(sw = 32, sl = 60, sh = 1.6, ww = 3) {
+module RemoteControlPCBSpacer(sw = 32, sl = 55, sh = 1.6, ww = 3) {
     // middle top wall y delta from top
     _mtd = 28;
     // contact row length
@@ -877,11 +877,16 @@ module RemoteControlPCBSpacer(sw = 32, sl = 60, sh = 1.6, ww = 3) {
     _mty = sl/2 - _mtd + ww/2;
     // middle bottom wall y coordinate
     _mby = _mty - _crl - ww;
+    // left side wall length
+    _lswl = _mtd + _crl + ww;
+    // left side wall y coordinate
+    _lswy = (sl - _lswl) / 2;
+    
 
     union() {
         // left side wall
-        translate([-(sw - ww)/2, 0, 0])
-            cube([ww, sl, sh], center = true);
+        translate([-(sw - ww)/2, _lswy, 0])
+            cube([ww, _lswl, sh], center = true);
         // right side wall
         translate([(sw - ww)/2, 0, 0])
             cube([ww, sl, sh], center = true);
@@ -889,8 +894,8 @@ module RemoteControlPCBSpacer(sw = 32, sl = 60, sh = 1.6, ww = 3) {
         translate([0, (sl - ww)/2, 0])
             cube([sw, ww, sh], center = true);
         // bottom side wall
-        translate([0, -(sl - ww)/2, 0])
-            cube([sw, ww, sh], center = true);
+        translate([sw/4, -(sl - ww)/2, 0])
+            cube([sw/2, ww, sh], center = true);
 
         // middle top wall
         translate([0, _mty, 0])
