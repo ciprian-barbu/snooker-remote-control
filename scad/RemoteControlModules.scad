@@ -451,20 +451,37 @@ module RemoteControlTopButtons(w, l, h, d, cw, lw, lh) {
     _bpwsl = _bpl * 0.5;
     // battery pack wall support height
     _bpwsh = _bph;
-    // battery pack wall support y coordinate
-    _ybpws = _yb;
+    // battery pack side wall support y coordinate
+    _ybpsws = _yb;
     // battery pack wall support x coordinate (small delta to meld into the wall)
-    _xbpws = (_bpw + _bpwsd - 0.1)/2;
+    _xbpsws = (_bpw + _bpwsd - 0.1)/2;
     // battery pack wall support z coordinate
     _zbpws = _zb - _bpfh;
+    // battery pack longitudinal wall support length
+    _bplwsl = _bpw * 0.75;
+    // battery pack longitudinal wall support x coordinate
+    _xbplws = 0;
+    // battery pack top wall support y coordinate
+    _ybptws = _yb + _bpl/2 + _bpwsd/2 + 0.05;
+    // battery pack bottom wall support y coordinate
+    _ybpbws = _yb - _bpl/2 - _bpwsd/2 - 0.05;
+    
 
     // Left wall support
-    translate([-_xbpws, _ybpws, _zbpws])
+    translate([-_xbpsws, _ybpsws, _zbpws])
         cube([_bpwsd, _bpwsl, _bpwsh], center = true);
 
     // Right wall support
-    translate([_xbpws, _ybpws, _zbpws])
+    translate([_xbpsws, _ybpsws, _zbpws])
         cube([_bpwsd, _bpwsl, _bpwsh], center = true);
+
+    // Top wall support
+    translate([_xbplws, _ybptws, _zbpws])
+        cube([_bplwsl, _bpwsd, _bpwsh], center = true);
+
+    // Bottom wall support
+    translate([_xbplws, _ybpbws, _zbpws])
+        cube([_bplwsl, _bpwsd, _bpwsh], center = true);
 
     ///////////////// PCB delimiters //////////////
     // delimiter wall width
